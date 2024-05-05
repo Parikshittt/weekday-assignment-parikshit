@@ -14,6 +14,20 @@ import IconButton from '@mui/material/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import { TextField } from '@mui/material';
 
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+    },
+}));
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
@@ -30,6 +44,11 @@ const roleNames = [
     'backend',
     'frontend',
     'fullstack',
+    'ios',
+    'android',
+    'tech lead',
+
+
 ];
 
 const employeeOptions = [
@@ -67,9 +86,20 @@ const basePayOptions = [
 ]
 
 
+
+
 const JobCardsComponent = () => {
 
+    const [open, setOpen] = React.useState(false);
+    const [selectedJob, setSelectedJob] = useState(null);
 
+    const handleClickOpen = (job) => {
+        setSelectedJob(job)
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     function toTitleCase(str) {
         return str.toLowerCase().replace(/(?:^|\s)\w/g, function (match) {
@@ -183,7 +213,7 @@ const JobCardsComponent = () => {
         if (filters.xp) {
             filteredJobs = filteredJobs.filter(job => {
                 if (job.minExp !== null) {
-                    return job.minExp = filters.xp;
+                    return job.minExp <= filters.xp;
                 } else {
                     return job.minExp >= 0;
                 }
@@ -453,11 +483,11 @@ const JobCardsComponent = () => {
                                 </span>
                                 {job.jobDetailsFromCompany.length > 250 &&
                                     <div style={{ display: 'flex', justifyContent: 'center', position: 'absolute', left: 0, right: 0, bottom: 200 }}>
-                                        <Button className='viewJobButton' style={{ color: '#4F49DA' }}>View Job</Button>
+                                        <Button className='viewJobButton' style={{ color: '#4F49DA' }} onClick={() => handleClickOpen(job)}>View Job</Button>
                                     </div>
                                 }
-                            </Typography>
 
+                            </Typography>
                             <Typography variant="body2" style={{ color: '#919191', fontWeight: 700, fontSize: 15, marginTop: 30 }}>
                                 Minimum Experience<br />{job.minExp ? <span>{job.minExp} years</span> : <span>Not Specified</span>}
                             </Typography>
@@ -472,6 +502,40 @@ const JobCardsComponent = () => {
                         </CardContent>
                     </Card>
                 ))}
+                {/* <div className="modal">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button onClick={handleClose}>&times;</button>
+                            <h2>{selectedJob && selectedJob.companyName}</h2>
+                        </div>
+                        <div className="modal-body">
+                            <p>{selectedJob && selectedJob.jobDetailsFromCompany}</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button onClick={handleClose}>Close</button>
+                            <button onClick={handleClose}>Save Changes</button>
+                        </div>
+                    </div>
+                </div> */}
+
+                {/* //modal */}
+                <BootstrapDialog
+                    onClose={handleClose}
+                    open={open}
+                >
+                    <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title" style={{ fontWeight: 700, textAlign: 'center' }}>
+                        Job Description
+                    </DialogTitle>
+                    <DialogContent>
+                        <Typography gutterBottom style={{ color: 'black', fontSize: 20, fontWeight: 700 }}>
+                            {<img src={selectedJob.logoUrl} alt="Company Logo" style={{ width: 60, borderRadius: 50, display: 'flex', margin: 'auto' }} />}
+                        </Typography>
+                        <Typography gutterBottom style={{ fontWeight: 300, }}>
+                            {selectedJob && selectedJob.jobDetailsFromCompany}
+                        </Typography>
+                    </DialogContent>
+                </BootstrapDialog>
+                {/* modal  */}
             </div>
         </div>
     );
