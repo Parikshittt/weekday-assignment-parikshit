@@ -3,3 +3,8 @@
   src: local("Inter-Regular"),
     url("./assets/fonts/Inter-Regular.ttf") format("truetype");
 }
+
+body {
+  margin: 0px;
+  padding: 0px;
+}

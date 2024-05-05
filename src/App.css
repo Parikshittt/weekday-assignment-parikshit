@@ -1,6 +1,7 @@
 .searchJobPage {
   margin: auto;
   display: flex;
+  flex-direction: column;
   font-family: "I-Regular";
   padding-top: 100px;
 }
