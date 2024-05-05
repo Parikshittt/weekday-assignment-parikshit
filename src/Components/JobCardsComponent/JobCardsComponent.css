@@ -1,3 +1,104 @@
+.searchJobPage {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: "I-Regular";
+  padding-top: 100px;
+  justify-content: flex-end;
+  width: 90%;
+  margin: auto;
+}
+
+.listOfJobCards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  column-gap: 10;
+  margin-top: 50px;
+  font-family: "I-Regular";
+}
+
+.individualJobCard {
+  display: flex;
+  border: 1px solid grey;
+  margin-bottom: 20px;
+  width: 25%;
+  margin-right: 10px;
+  border-radius: 15px;
+  transform: scale(1);
+}
+
+.individualJobCard:hover {
+  transform: scale(1.02);
+  transition: transform 0.25s ease-in-out;
+}
+
+.postedAgoPill {
+  border: 1px solid grey;
+  width: fit-content;
+  padding: 5px;
+  border-radius: 100px;
+}
+
+.companyLogo {
+  border-radius: 10px;
+  width: 70px;
+  margin-top: 10px;
+}
+
+.companyLogoAndNameRole {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.companyNameJobRole {
+  display: flex;
+  flex-direction: column;
+  color: "#8C8C8C";
+}
+
+.estimatedSalary {
+  font-family: "I-Regular";
+  font-weight: 700;
+  color: "#596574";
+  font-size: 14px;
+}
+
+.aboutCompany {
+  font-weight: 500;
+  color: "#333333";
+  font-size: 20px;
+}
+
+.aboutUs {
+  font-weight: 700;
+  color: "#212121";
+}
+
+.companyName {
+  font-size: 18px;
+}
+
+.jobRole {
+  font-size: 24px;
+}
+
+//Filter Classes Are Here
+
+.searchJobPage {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: "I-Regular";
+  padding-top: 100px;
+  justify-content: flex-end;
+  width: 90%;
+  margin: auto;
+}
+
 .listOfJobCards {
   display: flex;
   flex-direction: row;
