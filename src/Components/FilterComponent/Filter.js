@@ -142,7 +142,7 @@ export default function FilterComponent() {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', width: '100%', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
             <FormControl sx={{ m: 1, minWidth: '15%' }}>
                 <InputLabel id="roles-label">Roles</InputLabel>
                 <Select
