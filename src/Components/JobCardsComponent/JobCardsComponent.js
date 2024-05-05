@@ -181,13 +181,42 @@ const JobCardsComponent = () => {
             filteredJobs = filteredJobs.filter(job => filters.role.includes(job.jobRole.toLowerCase()));
         }
         if (filters.xp) {
-            filteredJobs = filteredJobs.filter(job => job.minExp >= filters.xp);
+            filteredJobs = filteredJobs.filter(job => {
+                if (job.minExp !== null) {
+                    return job.minExp = filters.xp;
+                } else {
+                    return job.minExp >= 0;
+                }
+            });
         }
+
         if (filters.remote && filters.remote.length > 0) {
-            filteredJobs = filteredJobs.filter(job => filters.remote.includes(job.location.toLowerCase()));
+            filteredJobs = filteredJobs.filter(job => {
+
+                if (filters.remote.includes('remote') || filters.remote.includes('hybrid')) {
+                    return filters.remote.includes(job.location.toLowerCase());
+                }
+
+                else if (filters.remote.includes('in-office')) {
+
+                    return !['remote', 'hybrid'].includes(job.location.toLowerCase());
+                }
+                return false;
+            });
         }
         if (filters.basePay) {
-            filteredJobs = filteredJobs.filter(job => job.minJdSalary >= filters.basePay)
+            filteredJobs = filteredJobs.filter(job => {
+                if (job.minJdSalary !== null) {
+                    return job.minJdSalary >= filters.basePay;
+                } else if (job.maxJdSalary !== null) {
+                    return job.maxJdSalary >= filters.basePay;
+                } else {
+                    return job.maxJdSalary >= 0;
+                }
+            });
+        }
+        if (filters.searchCompanyName) {
+            filteredJobs = filteredJobs.filter(job => job.companyName.toLowerCase().includes(filters.searchCompanyName.toLowerCase()))
         }
 
         // Set the filtered jobs
@@ -199,12 +228,13 @@ const JobCardsComponent = () => {
             role: selectedRoles,
             xp: selectedExperience,
             remote: selectedRemoteOptions,
-            basePay: selectedBasePay
+            basePay: selectedBasePay,
+            searchCompanyName: searchCompanyName
         };
 
         console.log('Active Filters:', activeFilters);
         filterFunction(activeFilters);
-    }, [selectedRoles, selectedExperience, selectedRemoteOptions, selectedBasePay]);
+    }, [selectedRoles, selectedExperience, selectedRemoteOptions, selectedBasePay, searchCompanyName]);
 
 
     return (
@@ -255,7 +285,7 @@ const JobCardsComponent = () => {
                                 value={roleName}
                                 style={getStyles(roleName, selectedRoles, theme)}
                             >
-                                {roleName}
+                                {toTitleCase(roleName)}
                             </MenuItem>
                         ))}
                     </Select>
@@ -346,7 +376,7 @@ const JobCardsComponent = () => {
                     >
                         {remoteOptions.map((option) => (
                             <MenuItem key={option} value={option}>
-                                {option}
+                                {toTitleCase(option)}
                             </MenuItem>
                         ))}
                     </Select>
