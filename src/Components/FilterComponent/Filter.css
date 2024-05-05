@@ -1,0 +1,15 @@
+.roleFilter {
+  width: 100px;
+}
+
+.ChipBox {
+    display: 'flex', flexWrap: 'wrap', gap: 0.5
+}
+
+.roleMenu {
+  width: 100px;
+}
+
+.roleFilterGroup {
+  width: 100px;
+}
