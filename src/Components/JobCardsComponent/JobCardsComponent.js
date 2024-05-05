@@ -16,6 +16,7 @@ import { TextField } from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+
 const MenuProps = {
     PaperProps: {
         style: {
@@ -26,9 +27,9 @@ const MenuProps = {
 };
 
 const roleNames = [
-    'Backend',
-    'Frontend',
-    'Fullstack',
+    'backend',
+    'frontend',
+    'fullstack',
 ];
 
 const employeeOptions = [
@@ -42,50 +43,33 @@ const employeeOptions = [
 ];
 
 const experienceOptions = [
-    '1 year',
-    '2 years',
-    '3 years',
-    '4 years',
-    '5 years',
-    '6 years',
-    '7 years',
-    '8 years',
-    '9 years',
-    '10+ years'
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ];
 
 const remoteOptions = [
-    'Remote',
-    'Hybrid',
-    'In-Office'
+    'remote',
+    'hybrid',
+    'in-office'
 ]
 
 const basePayOptions = [
-    '0L',
-    '10L',
-    '20L',
-    '30L',
-    '40L',
-    '50L',
-    '60L',
-    '70L'
+    '0',
+    '10',
+    '20',
+    '30',
+    '40',
+    '50',
+    '60',
+    '70',
+    '80',
+    '90',
+    '100'
 ]
 
-const JobCardsComponent = () => {
-    const [jobs, setJobs] = useState([]);
 
-    useEffect(() => {
-        fetch('https://api.weekday.technology/adhoc/getSampleJdJSON', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-            .then(response => response.json())
-            .then(data => setJobs(data.jdList))
-            .catch(error => console.error('Error fetching data:', error));
-    }, []);
+const JobCardsComponent = () => {
+
+
 
     function toTitleCase(str) {
         return str.toLowerCase().replace(/(?:^|\s)\w/g, function (match) {
@@ -97,7 +81,7 @@ const JobCardsComponent = () => {
     const [selectedRoles, setSelectedRoles] = React.useState([]);
     const [selectedEmployees, setSelectedEmployees] = React.useState('');
     const [selectedExperience, setSelectedExperience] = React.useState('');
-    const [remote, setRemoteOptions] = React.useState([])
+    const [selectedRemoteOptions, setSelectedRemoteOptions] = React.useState([]);
     const [selectedBasePay, setSelectedBasePay] = React.useState('');
     const [searchCompanyName, setSearchCompanyName] = React.useState('');
 
@@ -106,17 +90,23 @@ const JobCardsComponent = () => {
         setSelectedRoles(typeof value === 'string' ? value.split(',') : value);
     };
 
+
+
     const handleChangeEmployees = (event) => {
         setSelectedEmployees(event.target.value);
+
     };
 
     const handleChangeExperience = (event) => {
         setSelectedExperience(event.target.value);
     };
 
-    const handleChangeRemote = (event) => {
-        setRemoteOptions(event.target.value)
-    }
+
+
+    const handleChangeRemoteOptions = (event) => {
+        const { value } = event.target;
+        setSelectedRemoteOptions(value);
+    };
 
     const handleChangeBasePay = (event) => {
         setSelectedBasePay(event.target.value)
@@ -127,7 +117,7 @@ const JobCardsComponent = () => {
     };
 
     const handleDeleteRemote = (index) => () => {
-        setRemoteOptions((roles) => roles.filter((role, i) => i !== index));
+        setSelectedRemoteOptions((remote) => remote.filter((role, i) => i !== index));
     };
 
     const handleClearRoles = () => {
@@ -143,7 +133,7 @@ const JobCardsComponent = () => {
     };
 
     const handleClearRemote = () => {
-        setRemoteOptions([])
+        setSelectedRemoteOptions([])
     }
 
     const handleClearBasePay = () => {
@@ -162,6 +152,60 @@ const JobCardsComponent = () => {
                     : theme.typography.fontWeightMedium,
         };
     }
+
+    const [jobs, setJobs] = useState([]);
+    const [filteredJobs, setFilteredJobs] = useState([]);
+
+    useEffect(() => {
+        fetch('https://api.weekday.technology/adhoc/getSampleJdJSON', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+            .then(response => response.json())
+            .then(data => {
+                setJobs(data.jdList);
+                setFilteredJobs(data.jdList); // Set filteredJobs after fetching data
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    const filterFunction = (filters) => {
+        // Start with all jobs
+        let filteredJobs = jobs;
+
+        // Apply each filter
+        if (filters.role && filters.role.length > 0) {
+            filteredJobs = filteredJobs.filter(job => filters.role.includes(job.jobRole.toLowerCase()));
+        }
+        if (filters.xp) {
+            filteredJobs = filteredJobs.filter(job => job.minExp >= filters.xp);
+        }
+        if (filters.remote && filters.remote.length > 0) {
+            filteredJobs = filteredJobs.filter(job => filters.remote.includes(job.location.toLowerCase()));
+        }
+        if (filters.basePay) {
+            filteredJobs = filteredJobs.filter(job => job.minJdSalary >= filters.basePay)
+        }
+
+        // Set the filtered jobs
+        setFilteredJobs(filteredJobs);
+    };
+
+    useEffect(() => {
+        const activeFilters = {
+            role: selectedRoles,
+            xp: selectedExperience,
+            remote: selectedRemoteOptions,
+            basePay: selectedBasePay
+        };
+
+        console.log('Active Filters:', activeFilters);
+        filterFunction(activeFilters);
+    }, [selectedRoles, selectedExperience, selectedRemoteOptions, selectedBasePay]);
+
 
     return (
         <div className="searchJobPage">
@@ -255,7 +299,7 @@ const JobCardsComponent = () => {
                     >
                         {experienceOptions.map((option) => (
                             <MenuItem key={option} value={option}>
-                                {option}
+                                {option}&nbsp;year(s)
                             </MenuItem>
                         ))}
                     </Select>
@@ -266,8 +310,8 @@ const JobCardsComponent = () => {
                     <Select
                         labelId="remote-label"
                         id="remote-select"
-                        value={remote}
-                        onChange={handleChangeRemote}
+                        value={selectedRemoteOptions}
+                        onChange={handleChangeRemoteOptions}
                         multiple
                         input={<OutlinedInput id="remote-input" label="Remote" />}
                         endAdornment={
@@ -309,22 +353,22 @@ const JobCardsComponent = () => {
                 </FormControl>
 
                 <FormControl sx={{ m: 1, minWidth: '20%' }}>
-                    <InputLabel id="experience-label">Select Base Pay Range</InputLabel>
+                    <InputLabel id="experience-label">Minimum Base Pay Range</InputLabel>
                     <Select
                         labelId="experience-label"
                         id="experience-select"
                         value={selectedBasePay}
                         onChange={handleChangeBasePay}
-                        input={<OutlinedInput id="basePay-input" label="Select Base Pay Range" />}
+                        input={<OutlinedInput id="basePay-input" label="Minimum Base Pay Range" />}
                         endAdornment={
                             <IconButton onClick={handleClearBasePay} style={{ marginRight: 20, backgroundColor: '#00000030' }}>
                                 <ClearIcon />
                             </IconButton>
                         }
                     >
-                        {experienceOptions.map((option) => (
+                        {basePayOptions.map((option) => (
                             <MenuItem key={option} value={option}>
-                                {option}
+                                {option}K&nbsp;USD
                             </MenuItem>
                         ))}
                     </Select>
@@ -344,7 +388,7 @@ const JobCardsComponent = () => {
             </div>
             {/* Filters End */}
             <div className='listOfJobCards' style={{ justifyContent: 'flex-start', gap: '10%', flexWrap: 'wrap' }}>
-                {jobs.map(job => (
+                {filteredJobs.map(job => (
                     <Card key={job.jdUid} className='individualJobCard' style={{ borderRadius: 20 }}>
                         <CardContent>
                             <Typography variant="body2" color="textSecondary" className='postedAgoPill'>
