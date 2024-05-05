@@ -455,7 +455,7 @@ const JobCardsComponent = () => {
                                 ⏳ Posted 10 days ago
                             </Typography>
                             <div className='companyLogoAndNameRole'>
-                                <img src={job.logoUrl} alt="Company Logo" className='companyLogo' />
+                                {job && job.logoUrl && <img src={job.logoUrl} alt="Company Logo" className='companyLogo' />}
                                 <div className='companyNameJobRole'>
                                     <Typography variant="h5" className='companyName'>{job.companyName}</Typography>
                                     <Typography variant="h6" className='jobRole'>{toTitleCase(job.jobRole)}</Typography>
@@ -528,7 +528,7 @@ const JobCardsComponent = () => {
                     </DialogTitle>
                     <DialogContent>
                         <Typography gutterBottom style={{ color: 'black', fontSize: 20, fontWeight: 700 }}>
-                            {<img src={selectedJob.logoUrl} alt="Company Logo" style={{ width: 60, borderRadius: 50, display: 'flex', margin: 'auto' }} />}
+                            {selectedJob && selectedJob.logoUrl && <img src={selectedJob.logoUrl} alt="Company Logo" style={{ width: 60, borderRadius: 50, display: 'flex', margin: 'auto' }} />}
                         </Typography>
                         <Typography gutterBottom style={{ fontWeight: 300, }}>
                             {selectedJob && selectedJob.jobDetailsFromCompany}
