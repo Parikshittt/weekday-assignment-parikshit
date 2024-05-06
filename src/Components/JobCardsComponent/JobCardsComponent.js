@@ -261,8 +261,6 @@ const JobCardsComponent = () => {
             basePay: selectedBasePay,
             searchCompanyName: searchCompanyName
         };
-
-        console.log('Active Filters:', activeFilters);
         filterFunction(activeFilters); // Assuming filterFunction is defined outside the component and doesn't change
     }, [selectedRoles, selectedExperience, selectedRemoteOptions, selectedBasePay, searchCompanyName]);
 
